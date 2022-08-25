@@ -4,6 +4,14 @@
     <form @submit.prevent="$emit('show-value', inputValue)">
       <input class="search-input" v-model="inputValue" placeholder="Search character" />
       <button class="submit-btn">Search</button>
+      <!-- <div>
+        <input type="radio" id="status" name="parameter" value="status">
+        <label for="status">Status</label><br>
+        <input type="radio" id="type" name="parameter" value="">
+        <label for="type">Type</label><br>
+        <input type="radio" id="gender" name="parameter" value="JavaScript">
+        <label for="gender">Gender</label>
+      </div> -->
     </form>
   </div>
 </template>
