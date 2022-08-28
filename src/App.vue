@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SearchBanner @show-value="getChracter" />
+    <SearchBanner @show-value="getChracterByName" />
     <main>
       <ErrorMessage v-if='notFound' />
       <CharactersList />
@@ -26,6 +26,27 @@
           </li>
         </ul>
       </div>
+      <div class="pagination">
+        <ul class="pagination__items">
+          <li class="pagination__item">
+            <button class="pagination__btn" @click="getData">First page</button>
+          </li>
+          <li class="pagination__item">
+            <button class="pagination__btn">Prev page</button>
+          </li>
+          <li class="pagination__item">
+            <span class="pagination__current-page">{{ currentPage }}</span>
+          </li>
+          <li class="pagination__item">
+            <button class="pagination__btn">Next page</button>
+          </li>
+          <li class="pagination__item">
+            <button class="pagination__btn">Last page</button>
+          </li>
+          <!-- <p>Pages: <span>{{ lastPage }}</span></p> -->
+        </ul>
+
+      </div>
     </main>
   </div>
 </template>
@@ -50,18 +71,28 @@ export default {
   data() {
     return {
       notFound: false,
-      // message: 'TO jest props',
+      currentPage: 1,
+      lastPage: null,
+      info: [
+        // -------- example object
+        // {
+        //   count: 826,
+        //   pages: 42,
+        //   next: "https://rickandmortyapi.com/api/character/?page=2",
+        //   prev: null
+        // }
+      ],
       myCharacters: [
         {
-          // example data
-          id: 1,
-          name: "Rick Sanchez",
-          status: "Alive",
-          species: "Human",
-          type: "",
-          gender: "Male",
-          image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-          created: "2017-11-04T18:48:46.250Z"
+          // ------- example object
+          // id: 1,
+          // name: "Rick Sanchez",
+          // status: "Alive",
+          // species: "Human",
+          // type: "",
+          // gender: "Male",
+          // image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+          // created: "2017-11-04T18:48:46.250Z"
         }
       ]
     }
@@ -71,20 +102,20 @@ export default {
       axios.get(linkAPI)
         .then(res => {
           this.notFound = false;
-          console.log(res.data.results);
           this.myCharacters = res.data.results;
+          this.info = res.info;
         })
         .catch(err => {
           this.notFound = true;
           console.log(err);
         })
     },
-    getChracter(value) {
-      axios.get(`${linkAPI}?name=${value}`)
+    getChracterByName(name, filter) {
+      axios.get(`${linkAPI}?name=${name}&status=${filter}`)
         .then(res => {
           this.notFound = false;
-          console.log(res.data.results);
           this.myCharacters = res.data.results;
+          this.lastPage = res.data.info.pages;
         })
         .catch(err => {
           this.notFound = true;
@@ -93,7 +124,7 @@ export default {
     },
   },
   mounted() {
-    // this.getData();
+    this.getData();
   }
 }
 </script>
@@ -120,7 +151,6 @@ img {
 }
 
 li {
-  /* margin-bottom: 50px; */
   list-style: none;
 }
 
@@ -135,6 +165,7 @@ main {
 
 .character-list {
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .characters-card-list {
@@ -150,6 +181,7 @@ main {
   padding: 5px 10px;
   border-radius: 5px;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .character-card__title {
@@ -165,6 +197,8 @@ main {
 .character-card__created {
   font-size: 12px;
   font-weight: 300;
+  position: absolute;
+  bottom: 2px;
 }
 
 .character-card__label {
@@ -174,6 +208,37 @@ main {
 
 .character-card__image {
   border-radius: 2.5px;
+  margin-bottom: 10px;
+}
+
+.pagination {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.pagination__items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination__item {
+  border: 1px solid #e3e3e3;
+  padding: 7px;
+  border-radius: 2.5px;
+  margin: 0 1px;
+}
+
+.pagination__btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination__current-page {
+  font-weight: bold;
+  font-size: 16px;
+  color: #868686;
 }
 
 @media (min-width: 560px) {
@@ -198,7 +263,6 @@ main {
   .character-card {
     width: 300px;
   }
-
 }
 
 @media (min-width: 1024px) {
@@ -206,6 +270,7 @@ main {
     width: 1000px;
   }
 }
+
 @media (min-width: 1324px) {
   main {
     width: 1300px;
