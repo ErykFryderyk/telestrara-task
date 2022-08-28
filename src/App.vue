@@ -3,7 +3,7 @@
     <SearchBanner @show-value="getChracterByName" />
     <main>
       <ErrorMessage v-if='notFound' />
-      <CharactersList />
+      <!-- <CustomPagination/> -->
       <div class="characters-list" v-if="!notFound">
         <ul class="characters-card-list">
           <li class="character-card" v-for="character in myCharacters" :key="character.id">
@@ -54,7 +54,7 @@
 <script>
 import SearchBanner from './components/SearchBanner.vue';
 import ErrorMessage from './components/ErrorMessage.vue';
-import CharactersList from './components/CharactersList.vue';
+// import CustomPagination from './components/CustomPagination.vue';
 
 // eslint-disable-next-line no-unused-vars
 import axios from "axios";
@@ -66,8 +66,8 @@ export default {
   components: {
     SearchBanner,
     ErrorMessage,
-    CharactersList
-  },
+    // CustomPagination,
+},
   data() {
     return {
       notFound: false,
