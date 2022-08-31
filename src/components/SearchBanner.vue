@@ -3,10 +3,11 @@
     <h1 class="search-banner__title">Rick and Morty API</h1>
     <form class="search-form" @submit.prevent="$emit('show-value', inputValue, selectValue)">
       <div class="">
-        <input class="search-input" v-model="inputValue" placeholder="Search character" />
+        <input class="search-input" v-model="inputValue" placeholder="Character name" />
         <button class="submit-btn">Search</button>
       </div>
       <select class="search-filter" name="filter" v-model="selectValue">
+        <option value="">All</option>
         <option value="alive">Alive</option>
         <option value="dead">Dead</option>
         <option value="unknow">Unknow</option>
